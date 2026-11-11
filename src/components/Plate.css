@@ -1,0 +1,120 @@
+.plate {
+  --plate-rim: var(--app-rim-unrated);
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 5px solid var(--plate-rim);
+  border-radius: 50%;
+  background: var(--app-glaze);
+  box-shadow: inset 0 0 0 2px var(--app-glaze), var(--app-shadow-plate);
+}
+
+.plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plate-blank {
+  width: 46%;
+  height: 46%;
+  border: 1.5px solid var(--app-bisque);
+  border-radius: 50%;
+}
+
+.plate-hero {
+  width: 148px;
+  height: 148px;
+  border-width: 8px;
+}
+
+.plate-large {
+  width: 58px;
+  height: 58px;
+}
+
+.plate-medium {
+  width: 44px;
+  height: 44px;
+  border-width: 4px;
+}
+
+.plate-small {
+  width: 26px;
+  height: 26px;
+  border-width: 3px;
+  box-shadow: inset 0 0 0 1px var(--app-glaze);
+}
+
+.plate-rim-must {
+  --plate-rim: var(--app-rim-must);
+}
+
+.plate-rim-good {
+  --plate-rim: var(--app-rim-good);
+}
+
+.plate-rim-fine {
+  --plate-rim: var(--app-rim-fine);
+}
+
+.plate-rim-weak {
+  --plate-rim: var(--app-rim-weak);
+}
+
+.plate-rim-avoid {
+  --plate-rim: var(--app-rim-avoid);
+}
+
+.plate-rim-plain {
+  --plate-rim: var(--app-bisque);
+}
+
+.plate-rim-unrated {
+  outline: 1.5px dashed var(--app-bisque-line);
+  outline-offset: 2px;
+}
+
+.verdict-pill {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: var(--verdict-fill, var(--app-cobalt));
+  color: var(--app-on-cobalt);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.verdict-pill-must {
+  --verdict-fill: var(--app-pill-must);
+}
+
+.verdict-pill-good {
+  --verdict-fill: var(--app-pill-good);
+}
+
+.verdict-pill-fine {
+  --verdict-fill: var(--app-pill-fine);
+}
+
+.verdict-pill-weak {
+  --verdict-fill: var(--app-pill-weak);
+}
+
+.verdict-pill-avoid {
+  --verdict-fill: var(--app-pill-avoid);
+  font-size: 0.8125rem;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--app-on-cobalt-strike);
+}
+
+.verdict-pill-unrated {
+  padding: 3px 8px;
+  border: 1.5px solid var(--app-cobalt);
+  background: none;
+  color: var(--app-cobalt);
+}

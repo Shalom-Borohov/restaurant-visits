@@ -1,0 +1,11 @@
+.text-field label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.text-field-label {
+  padding: 0 6px;
+  color: var(--app-ink-soft);
+  font-size: 0.875rem;
+}

@@ -1,0 +1,66 @@
+.visit-month + .visit-month {
+  margin-top: 18px;
+}
+
+.visit-month-heading {
+  margin: 4px 8px 10px;
+  color: var(--app-ink-soft);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.visit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  color: var(--app-ink);
+  text-decoration: none;
+}
+
+.visit-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.visit-restaurant {
+  overflow: hidden;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  unicode-bidi: plaintext;
+}
+
+.visit-date {
+  flex: none;
+}
+
+.visit-plates {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.visit-more {
+  min-width: 26px;
+  color: var(--app-ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.visits-empty-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--app-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--app-bisque);
+  color: var(--app-cobalt);
+  font-weight: 600;
+  text-decoration: none;
+}

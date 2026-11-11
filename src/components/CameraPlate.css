@@ -1,0 +1,17 @@
+.camera-plate {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  box-sizing: border-box;
+  border: 7px solid var(--app-cobalt);
+  border-radius: 50%;
+  background: var(--app-glaze);
+  box-shadow:
+    inset 0 0 0 3px var(--app-glaze),
+    inset 0 0 0 5px var(--app-turquoise),
+    var(--app-shadow-float);
+  color: var(--app-cobalt);
+}

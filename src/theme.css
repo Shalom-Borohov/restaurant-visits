@@ -1,0 +1,270 @@
+:root {
+  --ion-font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Arial Hebrew', sans-serif;
+
+  --ion-color-primary: #1f3f8f;
+  --ion-color-primary-rgb: 31, 63, 143;
+  --ion-color-primary-contrast: #fbfaf6;
+  --ion-color-primary-contrast-rgb: 251, 250, 246;
+  --ion-color-primary-shade: #1b377e;
+  --ion-color-primary-tint: #35529a;
+
+  --ion-color-danger: #a8321f;
+  --ion-color-danger-rgb: 168, 50, 31;
+  --ion-color-danger-contrast: #fbfaf6;
+  --ion-color-danger-contrast-rgb: 251, 250, 246;
+  --ion-color-danger-shade: #942c1b;
+  --ion-color-danger-tint: #b14735;
+
+  --app-tab-bar-clearance: calc(84px + env(safe-area-inset-bottom));
+  --app-docked-page-clearance: calc(190px + env(safe-area-inset-bottom));
+
+  --ion-background-color: #fbfaf6;
+  --ion-background-color-rgb: 251, 250, 246;
+  --ion-text-color: #4e2a1d;
+  --ion-text-color-rgb: 78, 42, 29;
+  --ion-toolbar-background: var(--ion-background-color);
+  --ion-toolbar-color: var(--app-ink);
+
+  --app-glaze: var(--ion-background-color);
+  --app-tile: #fffefa;
+  --app-bisque: #ebe3d2;
+  --app-bisque-line: #c6b89f;
+  --app-ink: var(--ion-text-color);
+  --app-ink-soft: #7d6156;
+  --app-cobalt: var(--ion-color-primary);
+  --app-on-cobalt: var(--ion-color-primary-contrast);
+  --app-on-cobalt-soft: rgba(251, 250, 246, 0.8);
+  --app-on-cobalt-strike: rgba(251, 250, 246, 0.55);
+  --app-cobalt-wash: rgba(251, 250, 246, 0.16);
+  --app-turquoise: #2a9d9a;
+  --app-ochre: #d39b2a;
+  --app-clay: #a07a68;
+  --app-manganese: #6b3b2a;
+  --app-danger: var(--ion-color-danger);
+
+  --app-rim-must: var(--app-cobalt);
+  --app-rim-good: var(--app-turquoise);
+  --app-rim-fine: var(--app-ochre);
+  --app-rim-weak: var(--app-clay);
+  --app-rim-avoid: var(--app-manganese);
+  --app-rim-unrated: var(--app-bisque);
+
+  --app-pill-must: var(--app-cobalt);
+  --app-pill-good: #1d7a77;
+  --app-pill-fine: #8a5f0d;
+  --app-pill-weak: #8a6555;
+  --app-pill-avoid: var(--app-manganese);
+
+  --app-shadow-tile: 0 1px 2px rgba(107, 59, 42, 0.08), 0 6px 16px rgba(31, 63, 143, 0.08);
+  --app-shadow-plate: 0 2px 6px rgba(31, 63, 143, 0.18);
+  --app-shadow-float: 0 8px 20px rgba(31, 63, 143, 0.3);
+
+  --app-page-gutter: 12px;
+  --app-scroll-fade: 40px;
+
+  --app-radius-field: 34px;
+  --app-radius-tile: 24px;
+  --app-radius-inner: 20px;
+  --app-radius-pill: 999px;
+
+  --app-title-font: 'Suez One', 'Rubik', serif;
+}
+
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+  caret-color: var(--app-cobalt);
+}
+
+button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+button,
+a {
+  transition: opacity 120ms ease-out;
+}
+
+button:active:not(:disabled),
+a:active {
+  opacity: 0.65;
+}
+
+::selection {
+  background: rgba(42, 157, 154, 0.25);
+}
+
+:focus-visible {
+  outline: 2px solid var(--app-turquoise);
+  outline-offset: 2px;
+}
+
+ion-content::part(scroll) {
+  scrollbar-width: none;
+}
+
+.floating-tab-bar {
+  --background: rgba(255, 254, 250, 0.96);
+  --border: 0;
+  --color: var(--app-ink-soft);
+  --color-selected: var(--app-cobalt);
+  position: absolute;
+  inset-inline: 10px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 10;
+  height: 60px;
+  padding: 0;
+  border-radius: 30px;
+  box-shadow: 0 6px 24px rgba(31, 63, 143, 0.16), 0 0 0 1px rgba(107, 59, 42, 0.07);
+}
+
+.floating-tab-bar ion-label {
+  font-size: 0.6875rem;
+}
+
+.floating-tab-bar .tab-selected ion-label {
+  font-weight: 600;
+}
+
+.page-body {
+  min-height: 100%;
+  padding: 0 var(--app-page-gutter) calc(110px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.page-body-docked {
+  padding-bottom: var(--app-docked-page-clearance);
+}
+
+.floating-dock {
+  bottom: var(--app-tab-bar-clearance);
+}
+
+.page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.glaze-header {
+  margin: 0 -4px 12px;
+  padding: calc(10px + env(safe-area-inset-top)) 0 16px;
+  border-radius: 0 0 var(--app-radius-field) var(--app-radius-field);
+  background: var(--app-cobalt);
+  color: var(--app-on-cobalt);
+}
+
+.glaze-title {
+  margin: 0;
+  padding: 10px 20px 14px;
+  font-family: var(--app-title-font);
+  font-size: 2.375rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.tile {
+  padding: 12px 14px;
+  border-radius: var(--app-radius-tile);
+  background: var(--app-tile);
+  box-shadow: var(--app-shadow-tile);
+}
+
+.tile h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.secondary-text {
+  color: var(--app-ink-soft);
+  font-size: 0.8125rem;
+}
+
+.field {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-tile);
+  box-shadow: inset 0 0 0 1px var(--app-bisque);
+  color: var(--app-ink);
+  font: inherit;
+  font-size: 1rem;
+  text-align: start;
+}
+
+.field::placeholder {
+  color: var(--app-ink-soft);
+  opacity: 1;
+}
+
+.choice {
+  flex: none;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-tile);
+  box-shadow: inset 0 0 0 1px var(--app-bisque);
+  color: var(--app-ink);
+  font-size: 0.9375rem;
+}
+
+.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice[aria-pressed='true'] {
+  background: var(--app-cobalt);
+  box-shadow: none;
+  color: var(--app-on-cobalt);
+  font-weight: 500;
+}
+
+.primary-button {
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-cobalt);
+  color: var(--app-on-cobalt);
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: var(--app-shadow-float);
+}
+
+.danger-button {
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--app-radius-pill);
+  color: var(--app-danger);
+  font-size: 1rem;
+}
+
+.empty-note {
+  padding: 24px 12px;
+  color: var(--app-ink-soft);
+  text-align: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
