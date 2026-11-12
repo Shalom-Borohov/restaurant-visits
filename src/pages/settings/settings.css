@@ -78,10 +78,6 @@
   resize: none;
 }
 
-.feedback-text:placeholder-shown {
-  direction: rtl;
-}
-
 .feedback-notes {
   display: flex;
   flex-direction: column;
