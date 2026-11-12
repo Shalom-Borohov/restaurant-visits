@@ -13,6 +13,10 @@ const NOW = new Date(2026, 10, 7, 9, 30).getTime()
 
 const BACKUP_NAME = 'restaurants-backup-2026-11-07.zip'
 
+const versionLine = new RegExp(
+  `^גרסה ${__APP_VERSION__.replaceAll('.', '\\.')} · עודכנה \\d{1,2}\\.\\d{1,2}\\.\\d{4}, \\d{1,2}:\\d{2}$`,
+)
+
 const toasts = () => Array.from(document.querySelectorAll('ion-toast'), (toast) => toast.message)
 
 const restaurantNames = async () => (await allRestaurants()).map(({ name }) => name)
@@ -71,13 +75,13 @@ describe('settings', () => {
     Object.assign(navigator, { share: undefined, canShare: undefined })
   })
 
-  it('says what the backup holds and shows the version', async () => {
+  it('says what the backup holds and shows the version with its build time', async () => {
     await seedHarbour()
     renderAt('/tabs/settings')
 
     expect(await screen.findByText('מסעדה אחת · ביקור אחד · תמונה אחת')).toBeVisible()
     expect(screen.getByText(/רק בטלפון הזה/)).toBeVisible()
-    expect(screen.getByText(`גרסה ${__APP_VERSION__}`)).toBeVisible()
+    expect(screen.getByText(versionLine)).toBeVisible()
   })
 
   it('exports a dated zip through the share sheet', async () => {

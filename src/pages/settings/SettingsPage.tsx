@@ -1,6 +1,7 @@
 import { IonContent, IonPage } from '@ionic/react'
 import { BackupTile } from './BackupTile'
 import { SETTINGS_COPY } from './copy'
+import { FeedbackTile } from './FeedbackTile'
 import './settings.css'
 
 export function SettingsPage() {
@@ -13,7 +14,8 @@ export function SettingsPage() {
           </header>
           <div className="page-stack">
             <BackupTile />
-            <p className="secondary-text settings-version">{SETTINGS_COPY.version(__APP_VERSION__)}</p>
+            <FeedbackTile />
+            <p className="secondary-text settings-version">{SETTINGS_COPY.version(__APP_VERSION__, __APP_BUILT_AT__)}</p>
           </div>
         </div>
       </IonContent>
