@@ -2,22 +2,17 @@
   <defs>
     <linearGradient id="cobalt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d55b8"/><stop offset="1" stop-color="#19326f"/></linearGradient>
     <linearGradient id="glaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e4dfd2"/></linearGradient>
-    <radialGradient id="well" cx=".5" cy=".42" r=".6"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ebe6da"/></radialGradient>
     <filter id="lift" x="-30%" y="-20%" width="160%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#0a1a47" flood-opacity=".45"/></filter>
   </defs>
   <rect width="512" height="512" fill="url(#cobalt)"/>
-  <g filter="url(#lift)">
-    <circle cx="256" cy="256" r="134" fill="url(#glaze)"/>
-    <circle cx="256" cy="256" r="92" fill="url(#well)" stroke="#d6cfbf" stroke-width="4"/>
-  </g>
   <g fill="url(#glaze)" filter="url(#lift)">
-    <g transform="translate(70 256) scale(.74)">
+    <g transform="translate(198 256) scale(.9)">
       <rect x="-38" y="-170" width="13" height="100" rx="6.5"/>
       <rect x="-17" y="-170" width="13" height="100" rx="6.5"/>
       <rect x="4" y="-170" width="13" height="100" rx="6.5"/>
       <rect x="25" y="-170" width="13" height="100" rx="6.5"/>
       <path d="M-38 -100H38V-80C38 -38 13 -34 11 -4L15 150A15 15 0 0 1 -15 150L-11 -4C-13 -34 -38 -38 -38 -80Z"/>
     </g>
-    <path transform="translate(446 256) scale(.74)" d="M14 -164C6 -176 -6 -170 -10 -150C-22 -100 -26 -40 -24 22L-11 22L-13 155A13 13 0 0 0 13 155L14 22Z"/>
+    <path transform="translate(334 256) scale(.9)" d="M14 -164C6 -176 -6 -170 -10 -150C-22 -100 -26 -40 -24 22L-11 22L-13 155A13 13 0 0 0 13 155L14 22Z"/>
   </g>
 </svg>
