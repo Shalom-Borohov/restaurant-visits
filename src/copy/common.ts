@@ -8,6 +8,7 @@ export const COMMON_COPY = {
   cuisine: 'מטבח',
   back: 'חזרה',
   cancel: 'ביטול',
+  close: 'סגירה',
   save: 'שמירה',
   delete: 'מחיקה',
   newVisit: 'ביקור חדש',

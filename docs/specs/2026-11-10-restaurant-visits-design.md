@@ -55,6 +55,15 @@ A personal iPhone PWA that records what its owner ordered at each restaurant, ho
 58. **If a camera photo can't be read, the dish sheet opens without it and says so.** Why: PRODUCT principle "Never blocked" (added 2026-11-10 from spec review, clarifies 39).
 59. **Restoring a photo that has no thumbnail uses the photo itself as the thumbnail** (added 2026-11-10 from spec review, clarifies 29 and 46).
 48. **A city or cuisine filter whose value no restaurant has any more is dropped.** Why: after deleting or renaming the only restaurant with that value, its pill disappears and the list would stay filtered with no way to clear it (added 2026-11-10 from review, clarifies 42).
+64. **הגדרות has a "משוב" tile with "דיווח על באג / הצעה", between the backup and the version line. It opens a sheet that turns a bug report or an idea into a GitHub issue on this repo.**
+    - The sheet opens on באג. The open button stays off until there is text.
+    - "פתיחה ב-GitHub" opens a prefilled new issue outside the app, labelled `bug` or `feature`. The title is the first line, up to 80 characters, cut at a whole character with "…".
+    - The body adds a "מכשיר" section: the browser, the version with its build time in ISO UTC (exact whatever the phone's time zone, and it matches the deploy log), persistent storage ("אחסון קבוע: כן/לא"), space used ("נפח בשימוש: 1.2 MB") and whether it was sent from the installed app ("אפליקציה מותקנת: כן/לא"). A value the phone doesn't report reads "לא ידוע". The values are read when the sheet opens, so the tap opens the link at once.
+    - The link is at most 4,300 characters, the limit prayer-log measured for GitHub to keep a signed-out user's way back to the report. A longer report is cut at a whole character and marked "… (הדיווח נחתך כאן)", with the device section kept after the mark. The sheet then notes that the rest can be copied from it.
+    - Once GitHub opens, ביטול becomes סגירה and the sheet says to tap again if GitHub didn't open. Like the restaurant edit sheet, it closes only with its button. Closing discards the text, and the sheet opens empty again on באג. Why: by the time סגירה shows, the text is in GitHub, and asking before every close would get in the way.
+    - No restaurants, visits or photos are sent: the issue is public (25). The space used includes the app's own files, so it says nothing about how much is logged.
+    - Why: the same feedback path as the owner's other apps. It needs no token or server. Photos make storage the likeliest cause of lost data, so the storage lines answer the first follow-up question. Decided by the owner on 2026-11-12 (added 2026-11-12, issue #4).
+65. **The bottom of הגדרות shows "גרסה <version> · עודכנה <build date and time>".** The version is the semver in `package.json`. Every PR that ships raises it: the minor number for features, the patch number for fixes. PRs that change only CI, docs or dev dependencies keep it. The build time is stamped in at build time. Why: it's easy to tell whether the phone has the latest deploy, as in the owner's other apps. Decided by the owner on 2026-11-12 (added 2026-11-12, with 64).
 
 ### Photos
 

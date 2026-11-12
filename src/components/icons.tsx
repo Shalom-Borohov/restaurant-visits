@@ -79,6 +79,12 @@ export const SearchIcon = () => (
   </LineIcon>
 )
 
+export const ChatIcon = () => (
+  <LineIcon size={22}>
+    <path d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-8l-4 3.5V16H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />
+  </LineIcon>
+)
+
 export const ImportIcon = () => (
   <LineIcon size={22}>
     <path d="M12 4v10M8 10.5l4 3.5 4-3.5M7 11H6v9h12v-9h-1" />

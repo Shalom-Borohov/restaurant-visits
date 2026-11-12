@@ -37,10 +37,6 @@
   margin-bottom: 0;
 }
 
-.new-restaurant .primary-button:disabled {
-  opacity: 0.45;
-}
-
 .visit-settings {
   display: flex;
   flex-direction: column;
