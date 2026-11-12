@@ -212,6 +212,10 @@ ion-content::part(scroll) {
   opacity: 1;
 }
 
+.field:placeholder-shown {
+  direction: rtl;
+}
+
 .choice {
   flex: none;
   min-height: 44px;
