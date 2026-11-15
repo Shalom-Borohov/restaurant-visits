@@ -24,7 +24,7 @@ Imports go downward only: `pages` → `components` → `photo` → `data` → `c
 - `src/domain/`: pure functions over restaurants, visits and dishes, with no React or Dexie. `types.ts` holds the valibot schemas; `restaurantDishes.ts` groups a restaurant's dishes by name across visits.
 - `src/data/`: the Dexie database, the repo and backup. Writes go through `repo.ts`, which parses with the schemas. Photo bytes live in their own `photos` and `thumbnails` tables keyed by dish id; a dish's `hasPhoto` says whether one exists. Deletes cascade restaurant → visits → dishes → photos and thumbnails. New fields must be optional so old backups still import. `RecordsProvider` runs the one live query of all records; screens read it with `useRecords()`.
 - `src/photo/`: shrinking photos and turning their bytes into object URLs.
-- `src/components/`: UI shared by several screens (plates, photo inputs, choice pills, text fields).
+- `src/components/`: UI shared by several screens (dish photos, verdict words, the camera button beside the tab bar, photo inputs, choice pills, text fields).
 - `src/pages/<feature>/`: one folder per screen, each with its own `copy.ts` and CSS.
 
 ## Tests

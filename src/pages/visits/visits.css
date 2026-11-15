@@ -1,66 +1,74 @@
-.visit-month + .visit-month {
-  margin-top: 18px;
-}
-
-.visit-month-heading {
-  margin: 4px 8px 10px;
+.visits-month-heading {
+  margin: 18px 0 8px;
   color: var(--app-ink-soft);
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
-.visit-row {
+.visits-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-height: 44px;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: 84px;
+  padding: 0 14px;
   color: var(--app-ink);
   text-decoration: none;
 }
 
-.visit-top {
+.visits-row-line {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.visit-restaurant {
+.visits-row-line:first-child {
+  align-items: baseline;
+}
+
+.visits-restaurant {
+  min-width: 0;
   overflow: hidden;
   font-size: 1.0625rem;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
   unicode-bidi: plaintext;
 }
 
-.visit-date {
+.visits-total {
   flex: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
-.visit-plates {
+.visits-photos {
   display: flex;
+  flex: none;
   align-items: center;
-  gap: 6px;
-  margin-top: 6px;
+  gap: 4px;
 }
 
-.visit-more {
-  min-width: 26px;
+.visits-more {
+  margin-inline-start: 2px;
   color: var(--app-ink-soft);
   font-size: 0.8125rem;
-  font-weight: 600;
-  text-align: center;
 }
 
-.visits-empty-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0 18px;
-  border-radius: var(--app-radius-pill);
-  box-shadow: inset 0 0 0 1px var(--app-bisque);
-  color: var(--app-cobalt);
-  font-weight: 600;
+.visits-facts {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--app-ink-soft);
+  font-size: 0.875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visits-empty .quiet-button {
+  margin-top: 4px;
   text-decoration: none;
 }

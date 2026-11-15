@@ -33,9 +33,6 @@ function latestVisits(visits: Visit[]) {
   return latest
 }
 
-export const lastVisitedOn = (visits: Visit[], restaurantId: string) =>
-  latestVisits(visits).get(restaurantId)?.visitedOn
-
 type RankedRestaurant = {
   restaurant: Restaurant
   lastVisit: Visit | undefined

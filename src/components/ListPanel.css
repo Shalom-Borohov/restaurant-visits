@@ -1,0 +1,22 @@
+.list-panel {
+  --divider-inset: 14px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--app-radius-panel);
+  background: var(--app-panel);
+  list-style: none;
+}
+
+.list-panel > li {
+  position: relative;
+}
+
+.list-panel > li + li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: var(--divider-inset) 0;
+  height: 1px;
+  background: var(--app-hairline);
+}

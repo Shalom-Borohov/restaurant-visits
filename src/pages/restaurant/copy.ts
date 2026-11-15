@@ -1,10 +1,11 @@
 import { COMMON_COPY } from '../../copy/common'
 
 export const RESTAURANT_COPY = {
-  whatToOrder: 'מה להזמין',
+  toOrder: 'להזמין',
+  toSkip: 'לדלג',
+  toRate: 'לדרג',
   noDishes: 'עוד אין מנות',
-  orderedTimes: (count: number) => `הוזמן ${count} פעמים`,
-  lastVisit: (date: string) => `ביקור אחרון ${date}`,
+  orderCount: (count: number) => `×${count}`,
   edit: 'עריכה',
   editTitle: 'עריכת מסעדה',
   nameField: 'שם',

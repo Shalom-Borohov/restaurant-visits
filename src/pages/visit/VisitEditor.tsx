@@ -1,6 +1,7 @@
 import { useIonRouter } from '@ionic/react'
 import { useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { PlusIcon } from '../../components/icons'
 import { useConfirmDelete } from '../../components/useConfirmDelete'
 import { useMessageToast } from '../../components/useMessageToast'
 import { COMMON_COPY } from '../../copy/common'
@@ -16,9 +17,15 @@ import { dishesOfVisit } from '../../domain/lists'
 import { summarizeDishes } from '../../domain/restaurantDishes'
 import type { Records, ShrunkPhoto, Visit } from '../../domain/types'
 import { todayVisitDate } from '../../domain/visitDate'
-import { isInVisitsStack, restaurantPath, restaurantsStackVisitPath, VISITS_PATH } from '../../navigation/paths'
-import { AddDishDock } from './AddDishDock'
+import {
+  isInVisitsStack,
+  restaurantPath,
+  restaurantsStackVisitPath,
+  VISITS_PATH,
+  visitsStackVisitPath,
+} from '../../navigation/paths'
 import { VISIT_COPY } from './copy'
+import { DishCameraPill } from './DishCameraPill'
 import { DishList } from './DishList'
 import { MoveVisitSheet } from './MoveVisitSheet'
 import { useDishSheet } from './useDishSheet'
@@ -77,7 +84,9 @@ export function VisitEditor({ records, restaurant, restaurantName, visit }: Visi
 
   function openCreatedVisit() {
     if (createdVisitId.current) {
-      router.push(restaurantsStackVisitPath(createdVisitId.current), 'none', 'replace')
+      const stackVisitPath = isInVisitsStack(pathname) ? visitsStackVisitPath : restaurantsStackVisitPath
+
+      router.push(stackVisitPath(createdVisitId.current), 'none', 'replace')
     }
   }
 
@@ -132,27 +141,24 @@ export function VisitEditor({ records, restaurant, restaurantName, visit }: Visi
     })
   }
 
+  const movableRestaurant = visit && { name: restaurantName, onMove: () => setIsMoving(true) }
+
   return (
     <>
-      <div className="page-body page-body-docked page-stack visit-editor">
-        <VisitSettingsFields settings={settings} onChange={changeSettings}>
-          {visit && (
-            <button type="button" className="visit-settings-restaurant" onClick={() => setIsMoving(true)}>
-              <span className="visit-settings-label">{VISIT_COPY.visitRestaurant}</span>
-              <span className="field visit-settings-restaurant-name" dir="auto">
-                {restaurantName}
-              </span>
-            </button>
-          )}
-        </VisitSettingsFields>
+      <div className="page-body visit-editor">
+        <VisitSettingsFields settings={settings} onChange={changeSettings} restaurant={movableRestaurant} />
         <DishList dishes={visitDishes} onOpen={openEdit} />
+        <button type="button" className="quiet-button visit-add-dish" onClick={() => openAdd(undefined)}>
+          <PlusIcon />
+          <span>{VISIT_COPY.dishWithoutPhoto}</span>
+        </button>
         {visit && (
           <button type="button" className="danger-button visit-delete" onClick={() => confirmDeleteVisit(visit)}>
             {VISIT_COPY.deleteVisit}
           </button>
         )}
       </div>
-      <AddDishDock onPhotoTaken={openAdd} onWithoutPhoto={() => openAdd(undefined)} />
+      <DishCameraPill onPhotoTaken={openAdd} onUnreadablePhoto={() => openAdd(undefined)} />
       {sheet}
       {visit && (
         <MoveVisitSheet

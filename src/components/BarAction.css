@@ -1,0 +1,48 @@
+.bar-action {
+  position: fixed;
+  inset-inline-end: var(--app-bar-inset);
+  bottom: var(--app-bar-bottom);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--app-bar-height);
+  border-radius: calc(var(--app-bar-height) / 2);
+  background: var(--app-accent);
+  color: var(--app-on-accent);
+  box-shadow: var(--app-shadow-float);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 120ms ease-out;
+}
+
+.bar-action:active,
+.bar-action[aria-busy='true'] {
+  opacity: 0.65;
+}
+
+.bar-action:focus-within {
+  outline: 2px solid var(--app-ink);
+  outline-offset: 2px;
+}
+
+.bar-scrim {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 9;
+  height: calc(var(--app-bar-bottom) + var(--app-bar-height) + 46px);
+  background: linear-gradient(rgba(var(--ion-background-color-rgb), 0), var(--ion-background-color) 55%);
+  pointer-events: none;
+}
+
+.bar-action-round {
+  width: var(--app-bar-height);
+}
+
+.bar-action-pill {
+  width: var(--app-bar-pill-width);
+  font-size: 1rem;
+  font-weight: 700;
+}

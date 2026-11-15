@@ -4,22 +4,13 @@ import type { Dish, Records } from '../../domain/types'
 export type WaitingDish = {
   dish: Dish
   restaurantName: string
-}
-
-type SharedVisit = {
-  restaurantName: string
   visitedOn: string
 }
 
 export type Waiting = {
-  shown: WaitingDish[]
-  hiddenCount: number
-  sharedVisit: SharedVisit | undefined
+  dishes: WaitingDish[]
+  sharedVisitId: string | undefined
 }
-
-const MAX_WAITING_SHOWN = 8
-
-const NONE_HIDDEN = 0
 
 const SINGLE_VISIT = 1
 
@@ -29,7 +20,7 @@ export function waitingDishes({ restaurants, visits, dishes }: Records): Waiting
   const unrated = unratedDishes(visits, dishes).flatMap(({ dish, visit }) => {
     const restaurantName = restaurantNames.get(visit.restaurantId)
 
-    return restaurantName ? [{ dish, visit, restaurantName }] : []
+    return restaurantName ? [{ dish, restaurantName, visitedOn: visit.visitedOn }] : []
   })
 
   const [newest] = unrated
@@ -38,11 +29,7 @@ export function waitingDishes({ restaurants, visits, dishes }: Records): Waiting
     return undefined
   }
 
-  const fromOneVisit = new Set(unrated.map(({ visit }) => visit.id)).size === SINGLE_VISIT
+  const fromOneVisit = new Set(unrated.map(({ dish }) => dish.visitId)).size === SINGLE_VISIT
 
-  return {
-    shown: unrated.slice(0, MAX_WAITING_SHOWN).map(({ dish, restaurantName }) => ({ dish, restaurantName })),
-    hiddenCount: Math.max(unrated.length - MAX_WAITING_SHOWN, NONE_HIDDEN),
-    sharedVisit: fromOneVisit ? { restaurantName: newest.restaurantName, visitedOn: newest.visit.visitedOn } : undefined,
-  }
+  return { dishes: unrated, sharedVisitId: fromOneVisit ? newest.dish.visitId : undefined }
 }

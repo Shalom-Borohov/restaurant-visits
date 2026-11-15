@@ -1,17 +1,16 @@
 import { dishesByVisit, restaurantsByRecentVisit } from '../../domain/lists'
-import { type DishSummary, summarizeDishes } from '../../domain/restaurantDishes'
-import type { Records, Restaurant, Verdict } from '../../domain/types'
+import { type DishSummary, SKIP_VERDICTS, summarizeDishes } from '../../domain/restaurantDishes'
+import type { Records, Restaurant } from '../../domain/types'
 
 export type RestaurantCard = {
   restaurant: Restaurant
   lastVisitedOn: string | undefined
-  best: DishSummary | undefined
-  worst: DishSummary | undefined
+  bestPhoto: DishSummary | undefined
 }
 
-const SKIP_VERDICTS: readonly Verdict[] = ['weak', 'avoid']
+const isWorthOrdering = (summary: DishSummary) => !summary.verdict || !SKIP_VERDICTS.includes(summary.verdict)
 
-const isSkip = (summary: DishSummary) => summary.verdict !== undefined && SKIP_VERDICTS.includes(summary.verdict)
+const isPhotoWorthShowing = (summary: DishSummary) => summary.photoDishId !== undefined && isWorthOrdering(summary)
 
 export function restaurantCards({ restaurants, visits, dishes }: Records): RestaurantCard[] {
   const visitsByRestaurant = Map.groupBy(visits, (visit) => visit.restaurantId)
@@ -20,8 +19,7 @@ export function restaurantCards({ restaurants, visits, dishes }: Records): Resta
   return restaurantsByRecentVisit(restaurants, visits).map(({ restaurant, lastVisitedOn }) => {
     const ownVisits = visitsByRestaurant.get(restaurant.id) ?? []
     const ownDishes = ownVisits.flatMap((visit) => dishesOfVisits.get(visit.id) ?? [])
-    const [best, ...rest] = summarizeDishes(ownVisits, ownDishes)
 
-    return { restaurant, lastVisitedOn, best, worst: rest.findLast(isSkip) }
+    return { restaurant, lastVisitedOn, bestPhoto: summarizeDishes(ownVisits, ownDishes).find(isPhotoWorthShowing) }
   })
 }

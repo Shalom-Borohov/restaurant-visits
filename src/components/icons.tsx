@@ -85,6 +85,25 @@ export const ChatIcon = () => (
   </LineIcon>
 )
 
+export const PlateIcon = () => (
+  <LineIcon size={22}>
+    <circle cx="12" cy="12" r="8" />
+    <circle cx="12" cy="12" r="4" />
+  </LineIcon>
+)
+
+export const CheckIcon = () => (
+  <LineIcon size={15}>
+    <path d="m5 12.5 4.5 4.5L19 7.5" />
+  </LineIcon>
+)
+
+export const OpenIcon = () => (
+  <LineIcon size={20}>
+    <path d="m15 18-6-6 6-6" />
+  </LineIcon>
+)
+
 export const ImportIcon = () => (
   <LineIcon size={22}>
     <path d="M12 4v10M8 10.5l4 3.5 4-3.5M7 11H6v9h12v-9h-1" />

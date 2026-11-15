@@ -34,6 +34,13 @@ describe('feedback', () => {
     Object.assign(navigator, { storage: undefined })
   })
 
+  it('says what a report sends before it is opened', async () => {
+    renderAt('/tabs/settings')
+
+    expect(await screen.findByRole('button', { name: 'דיווח על באג / הצעה' })).toBeVisible()
+    expect(screen.getByText(/המסעדות, הביקורים והתמונות לא נשלחים/)).toBeVisible()
+  })
+
   it('opens a bug report as a prefilled GitHub issue outside the app, only once there is text', async () => {
     const openWindow = stubOpenWindow()
 

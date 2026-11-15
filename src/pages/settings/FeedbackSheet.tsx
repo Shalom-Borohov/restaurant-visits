@@ -66,7 +66,7 @@ function FeedbackForm({ onClose }: Pick<FeedbackSheetProps, 'onClose'>) {
           </div>
           <button
             type="button"
-            className="primary-button settings-action"
+            className="primary-button"
             disabled={text.trim() === ''}
             onClick={openInGitHub}
           >

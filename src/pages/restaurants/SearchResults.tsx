@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
-import { Plate } from '../../components/Plate'
-import { VerdictPill } from '../../components/VerdictPill'
+import { DishPhoto } from '../../components/DishPhoto'
+import { VerdictWord } from '../../components/VerdictWord'
 import { photoDishId } from '../../domain/dishPhoto'
+import { photoFadeForVerdict } from '../../domain/photoFade'
 import { type DishMatch, searchAll } from '../../domain/search'
 import type { Records } from '../../domain/types'
 import { restaurantPath } from '../../navigation/paths'
 import { RESTAURANTS_COPY } from './copy'
 import type { RestaurantCard } from './restaurantCards'
-import { RestaurantTile } from './RestaurantTile'
+import { RestaurantList } from './RestaurantList'
 
 type SearchResultsProps = {
   query: string
@@ -19,14 +20,21 @@ function DishResult({ match }: { match: DishMatch }) {
   const { dish, restaurant } = match
 
   return (
-    <Link className="tile dish-result" to={restaurantPath(restaurant.id)}>
-      <Plate name={dish.name} photoDishId={photoDishId(dish)} verdict={dish.verdict} size="medium" />
-      <span className="dish-result-text">
-        <span className="dish-result-name">{dish.name}</span>
-        <span className="secondary-text">{restaurant.name}</span>
-      </span>
-      <VerdictPill verdict={dish.verdict} />
-    </Link>
+    <li>
+      <Link className="restaurants-row restaurants-dish-row" to={restaurantPath(restaurant.id)}>
+        <DishPhoto
+          photoDishId={photoDishId(dish)}
+          name={dish.name}
+          size="small"
+          fade={photoFadeForVerdict(dish.verdict)}
+        />
+        <span className="restaurants-row-text">
+          <span className="restaurants-row-name restaurants-dish-name">{dish.name}</span>
+          <span className="restaurants-row-meta">{restaurant.name}</span>
+        </span>
+        <VerdictWord verdict={dish.verdict} />
+      </Link>
+    </li>
   )
 }
 
@@ -42,19 +50,19 @@ export function SearchResults({ query, records, cards }: SearchResultsProps) {
   return (
     <>
       {foundCards.length > 0 && (
-        <section className="page-stack search-group">
-          <h2 className="search-group-heading">{RESTAURANTS_COPY.restaurantResults}</h2>
-          {foundCards.map((card) => (
-            <RestaurantTile key={card.restaurant.id} card={card} />
-          ))}
+        <section>
+          <h2 className="section-heading search-heading">{RESTAURANTS_COPY.restaurantResults}</h2>
+          <RestaurantList cards={foundCards} />
         </section>
       )}
       {found.dishes.length > 0 && (
-        <section className="page-stack search-group">
-          <h2 className="search-group-heading">{RESTAURANTS_COPY.dishResults}</h2>
-          {found.dishes.map((match) => (
-            <DishResult key={match.dish.id} match={match} />
-          ))}
+        <section>
+          <h2 className="section-heading search-heading">{RESTAURANTS_COPY.dishResults}</h2>
+          <ul className="list-panel restaurants-dish-panel">
+            {found.dishes.map((match) => (
+              <DishResult key={match.dish.id} match={match} />
+            ))}
+          </ul>
         </section>
       )}
     </>

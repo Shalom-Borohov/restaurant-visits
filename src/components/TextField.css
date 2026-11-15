@@ -5,7 +5,6 @@
 }
 
 .text-field-label {
-  padding: 0 6px;
   color: var(--app-ink-soft);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }

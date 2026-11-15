@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import '../../components/BarAction.css'
+import { BarScrim } from '../../components/BarScrim'
 import { CameraIcon } from '../../components/icons'
 import { PhotoInput } from '../../components/PhotoInputs'
 import { useMessageToast } from '../../components/useMessageToast'
@@ -6,14 +8,14 @@ import type { ShrunkPhoto } from '../../domain/types'
 import { shrinkPhoto } from '../../photo/shrink'
 import { VISIT_COPY } from './copy'
 
-type AddDishDockProps = {
+type DishCameraPillProps = {
   onPhotoTaken: (photo: ShrunkPhoto) => void
-  onWithoutPhoto: () => void
+  onUnreadablePhoto: () => void
 }
 
-const DOCK_CAMERA_ICON_SIZE = 26
+const PILL_CAMERA_ICON_SIZE = 24
 
-export function AddDishDock({ onPhotoTaken, onWithoutPhoto }: AddDishDockProps) {
+export function DishCameraPill({ onPhotoTaken, onUnreadablePhoto }: DishCameraPillProps) {
   const [isShrinking, setIsShrinking] = useState(false)
   const toast = useMessageToast()
 
@@ -23,7 +25,7 @@ export function AddDishDock({ onPhotoTaken, onWithoutPhoto }: AddDishDockProps) 
     try {
       onPhotoTaken(await shrinkPhoto(file))
     } catch {
-      onWithoutPhoto()
+      onUnreadablePhoto()
       void toast(VISIT_COPY.cameraPhotoFailed)
     } finally {
       setIsShrinking(false)
@@ -31,14 +33,18 @@ export function AddDishDock({ onPhotoTaken, onWithoutPhoto }: AddDishDockProps) 
   }
 
   return (
-    <div slot="fixed" className="floating-dock add-dish-dock" aria-busy={isShrinking}>
-      <PhotoInput className="primary-button add-dish-camera" opensCamera onPick={(file) => void takePhoto(file)}>
-        <CameraIcon size={DOCK_CAMERA_ICON_SIZE} />
+    <>
+      <BarScrim />
+      <PhotoInput
+        slot="fixed"
+        aria-busy={isShrinking}
+        className="bar-action bar-action-pill"
+        opensCamera
+        onPick={(file) => void takePhoto(file)}
+      >
+        <CameraIcon size={PILL_CAMERA_ICON_SIZE} />
         <span>{VISIT_COPY.dishCamera}</span>
       </PhotoInput>
-      <button type="button" className="choice add-dish-plain" onClick={onWithoutPhoto}>
-        {VISIT_COPY.dishWithoutPhoto}
-      </button>
-    </div>
+    </>
   )
 }

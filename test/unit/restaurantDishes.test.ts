@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { summarizeDishes } from '../../src/domain/restaurantDishes'
+import { type DishSummary, groupForRevisit, SKIP_VERDICTS, summarizeDishes } from '../../src/domain/restaurantDishes'
 import { dish, visit } from '../helpers/records'
 
 const october = visit({ id: 'october', visitedOn: '2026-10-12' })
@@ -77,5 +77,44 @@ describe('a restaurant’s dishes', () => {
       'קבב טלה',
       'לימונענע',
     ])
+  })
+})
+
+describe('grouping a restaurant’s dishes for a revisit', () => {
+  const names = (summaries: DishSummary[]) => summaries.map((summary) => summary.name)
+
+  it('puts must-order apart, טעים then בסדר to order, לא משהו then לא להזמין to skip, and unrated last', () => {
+    const groups = groupForRevisit(
+      summarizeDishes(
+        [october, november],
+        [
+          dish({ id: 'unrated', visitId: 'november', name: 'לימונענע' }),
+          dish({ id: 'avoid', visitId: 'november', name: 'קבב טלה', verdict: 'avoid' }),
+          dish({ id: 'old must', visitId: 'october', name: 'חומוס', verdict: 'must' }),
+          dish({ id: 'fine', visitId: 'november', name: 'פול', verdict: 'fine' }),
+          dish({ id: 'new must', visitId: 'november', name: 'סביח', verdict: 'must' }),
+          dish({ id: 'weak', visitId: 'november', name: 'צ׳יפס', verdict: 'weak' }),
+          dish({ id: 'good', visitId: 'october', name: 'פיתה', verdict: 'good' }),
+        ],
+      ),
+    )
+
+    expect(names(groups.mustOrder)).toEqual(['סביח', 'חומוס'])
+    expect(names(groups.toOrder)).toEqual(['פיתה', 'פול'])
+    expect(names(groups.toSkip)).toEqual(['צ׳יפס', 'קבב טלה'])
+    expect(names(groups.toRate)).toEqual(['לימונענע'])
+  })
+
+  it('leaves a group empty when no dish belongs to it', () => {
+    const groups = groupForRevisit(
+      summarizeDishes([november], [dish({ id: 'good', visitId: 'november', name: 'פיתה', verdict: 'good' })]),
+    )
+
+    expect(groups).toMatchObject({ mustOrder: [], toSkip: [], toRate: [] })
+    expect(names(groups.toOrder)).toEqual(['פיתה'])
+  })
+
+  it('names לא משהו and לא להזמין as the verdicts to skip', () => {
+    expect(SKIP_VERDICTS).toEqual(['weak', 'avoid'])
   })
 })

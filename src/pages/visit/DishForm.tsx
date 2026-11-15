@@ -120,7 +120,6 @@ export function DishForm({
           <DishPhotoArea
             dish={dish}
             name={form.name}
-            verdict={form.verdict}
             photo={form.photo}
             isShrinking={isShrinking}
             onPick={(file) => void pickPhoto(file)}

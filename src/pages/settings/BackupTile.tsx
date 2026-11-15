@@ -25,28 +25,30 @@ export function BackupTile() {
   const restoreFromFile = useBackupRestore()
 
   return (
-    <section className="tile settings-backup">
+    <section className="tile settings-panel">
       <h2>{SETTINGS_COPY.backup}</h2>
-      <p className="secondary-text settings-note">{SETTINGS_COPY.storageNote}</p>
+      <p className="settings-note">{SETTINGS_COPY.storageNote}</p>
       <BackupCounts />
-      {fileAwaitingTap ? (
-        <div className="settings-ready" role="status">
-          <span>{SETTINGS_COPY.backupReady}</span>
-          <button type="button" className="primary-button settings-action" onClick={() => void shareAgain(fileAwaitingTap)}>
+      <div className="settings-actions">
+        {fileAwaitingTap ? (
+          <div className="settings-ready" role="status">
+            <span>{SETTINGS_COPY.backupReady}</span>
+            <button type="button" className="primary-button" onClick={() => void shareAgain(fileAwaitingTap)}>
+              <ShareIcon />
+              {SETTINGS_COPY.share}
+            </button>
+          </div>
+        ) : (
+          <button type="button" className="primary-button" onClick={() => void exportData()}>
             <ShareIcon />
-            {SETTINGS_COPY.share}
+            {SETTINGS_COPY.exportBackup}
           </button>
-        </div>
-      ) : (
-        <button type="button" className="primary-button settings-action" onClick={() => void exportData()}>
-          <ShareIcon />
-          {SETTINGS_COPY.exportBackup}
+        )}
+        <button type="button" className="quiet-button" onClick={() => fileInput.current?.click()}>
+          <ImportIcon />
+          {SETTINGS_COPY.restoreBackup}
         </button>
-      )}
-      <button type="button" className="settings-secondary settings-action" onClick={() => fileInput.current?.click()}>
-        <ImportIcon />
-        {SETTINGS_COPY.restoreBackup}
-      </button>
+      </div>
       <input
         ref={fileInput}
         className="visually-hidden"
