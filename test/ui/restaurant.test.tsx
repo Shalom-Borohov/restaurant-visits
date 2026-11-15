@@ -10,7 +10,7 @@ import {
 } from '../../src/data/repo'
 import { RESTAURANTS_PATH,restaurantPath, restaurantsStackVisitPath } from '../../src/navigation/paths'
 import { resetDb } from '../helpers/db'
-import { expectInOrder, ionElement, selectedTab } from '../helpers/ionic'
+import { ionElement, selectedTab } from '../helpers/ionic'
 import { scrollObservedOutOfView } from '../helpers/intersectionObserver'
 import { alertDismissed, alertHeader, alertMessage, alertShown, clickAlertButton } from '../helpers/overlays'
 import { currentPath, currentSearch, renderAt } from '../helpers/renderAt'
@@ -30,22 +30,71 @@ const saveButton = async () => {
 describe('restaurant page', () => {
   beforeEach(resetDb)
 
-  it('stacks the dishes best first, with their verdict words and repeat counts', async () => {
+  it('groups the dishes under להזמין, לדלג and לדרג, in that order', async () => {
+    const restaurantId = await addRestaurant({ name: 'מזנון הנמל' }, NOW)
+    const visitId = await addVisit({ restaurantId, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
+
+    await addDish({ visitId, name: 'פירה', verdict: 'fine' }, undefined, NOW)
+    await addDish({ visitId, name: 'קרם ברולה', verdict: 'avoid' }, undefined, NOW)
+    await addDish({ visitId, name: 'לימונענע' }, undefined, NOW)
+    await addDish({ visitId, name: 'סביח', verdict: 'good' }, undefined, NOW)
+    await addDish({ visitId, name: 'קרפצ׳יו', verdict: 'weak' }, undefined, NOW)
+    await addDish({ visitId, name: 'שקשוקה', verdict: 'must' }, undefined, NOW)
+    renderAt(restaurantPath(restaurantId))
+
+    const toOrder = await screen.findByRole('region', { name: 'להזמין' })
+    const toSkip = screen.getByRole('region', { name: 'לדלג' })
+    const toRate = screen.getByRole('region', { name: 'לדרג' })
+
+    const dishNames = (section: HTMLElement) =>
+      within(section)
+        .getAllByRole('button')
+        .map((dishButton) => dishButton.textContent)
+
+    expect(dishNames(toOrder)).toEqual([
+      expect.stringContaining('שקשוקה'),
+      expect.stringContaining('סביח'),
+      expect.stringContaining('פירה'),
+    ])
+    expect(within(toOrder).getByRole('button', { name: /סביח/ })).toHaveTextContent('טעים')
+    expect(within(toOrder).getByRole('button', { name: /פירה/ })).toHaveTextContent('בסדר')
+    expect(dishNames(toSkip)).toEqual([expect.stringContaining('קרפצ׳יו'), expect.stringContaining('קרם ברולה')])
+    expect(dishNames(toRate)).toEqual([expect.stringContaining('לימונענע')])
+    expect(screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)).toEqual([
+      'להזמין',
+      'לדלג',
+      'לדרג',
+      'ביקורים',
+    ])
+  })
+
+  it('shows no heading for a group without dishes', async () => {
+    const restaurantId = await addRestaurant({ name: 'מזנון הנמל' }, NOW)
+    const visitId = await addVisit({ restaurantId, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
+
+    await addDish({ visitId, name: 'חומוס', verdict: 'avoid' }, undefined, NOW)
+    renderAt(restaurantPath(restaurantId))
+
+    expect(await screen.findByRole('region', { name: 'לדלג' })).toHaveTextContent('חומוס')
+    expect(screen.queryByRole('heading', { name: 'להזמין' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'לדרג' })).not.toBeInTheDocument()
+  })
+
+  it('shows how many times a dish was ordered only when more than once', async () => {
     const restaurantId = await addRestaurant({ name: 'מזנון הנמל' }, NOW)
     const earlier = await addVisit({ restaurantId, visitedOn: '2026-10-01', kind: 'dineIn' }, NOW)
     const later = await addVisit({ restaurantId, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
 
     await addDish({ visitId: earlier, name: 'סביח', verdict: 'good' }, undefined, NOW)
     await addDish({ visitId: later, name: 'סביח', verdict: 'good' }, undefined, NOW)
-    await addDish({ visitId: later, name: 'חומוס', verdict: 'avoid' }, undefined, NOW)
-    await addDish({ visitId: later, name: 'לימונענע' }, undefined, NOW)
+    await addDish({ visitId: earlier, name: 'שקשוקה', verdict: 'must' }, undefined, NOW)
     await addDish({ visitId: later, name: 'שקשוקה', verdict: 'must' }, undefined, NOW)
+    await addDish({ visitId: later, name: 'חומוס', verdict: 'good' }, undefined, NOW)
     renderAt(restaurantPath(restaurantId))
 
-    await expectInOrder(['שקשוקה', 'סביח', 'חומוס', 'לימונענע'])
-    await expectInOrder(['חובה להזמין', 'טעים', 'לא להזמין', 'לדרג'])
-    expect(screen.getByText('הוזמן 2 פעמים')).toBeVisible()
-    expect(screen.getAllByText(/הוזמן/)).toHaveLength(1)
+    expect(await screen.findByRole('button', { name: /סביח/ })).toHaveTextContent('×2')
+    expect(screen.getByRole('button', { name: /שקשוקה/ })).toHaveTextContent('×2')
+    expect(screen.getByRole('button', { name: /חומוס/ })).not.toHaveTextContent('×')
   })
 
   it('shows each dish with its latest price and verdict, and opens its latest visit', async () => {
@@ -72,7 +121,7 @@ describe('restaurant page', () => {
     expect(selectedTab()).toBe('restaurants')
   })
 
-  it('sums up the restaurant: city, cuisine, last visit, visit count, would-return and note', async () => {
+  it('sums up the restaurant: city, cuisine, visit count, would-return and note', async () => {
     const restaurantId = await addRestaurant(
       { name: 'מזנון הנמל', city: 'חיפה', cuisine: 'ים תיכוני', wouldReturn: 'no', note: 'שירות איטי' },
       NOW,
@@ -85,8 +134,7 @@ describe('restaurant page', () => {
     const summary = await screen.findByRole('region', { name: 'מזנון הנמל' })
 
     expect(within(summary).getByRole('heading', { name: 'מזנון הנמל' })).toBeVisible()
-    expect(summary).toHaveTextContent('חיפה · ים תיכוני')
-    expect(summary).toHaveTextContent('ביקור אחרון 3 בנובמבר 2026 · 2 ביקורים')
+    expect(summary).toHaveTextContent('חיפה · ים תיכוני · 2 ביקורים')
     expect(summary).toHaveTextContent('לא אחזור')
     expect(summary).toHaveTextContent('שירות איטי')
   })
@@ -178,7 +226,7 @@ describe('restaurant page', () => {
 
     renderAt(restaurantPath(restaurantId))
 
-    fireEvent.click(await screen.findByRole('button', { name: 'ביקור חדש כאן' }))
+    fireEvent.click(await screen.findByRole('link', { name: 'ביקור חדש כאן' }))
 
     await waitFor(() => expect(currentPath()).toBe('/tabs/restaurants/visits/new'))
     expect(currentSearch()).toBe(`?restaurant=${restaurantId}`)

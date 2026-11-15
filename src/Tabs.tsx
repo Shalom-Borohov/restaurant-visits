@@ -18,6 +18,7 @@ export function Tabs() {
         <Route path="restaurants/visits/new" element={<VisitPage />} />
         <Route path="restaurants/visits/:visitId" element={<VisitPage />} />
         <Route path="visits" element={<VisitsPage />} />
+        <Route path="visits/new" element={<VisitPage />} />
         <Route path="visits/:visitId" element={<VisitPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route index element={<Navigate to="restaurants" replace />} />

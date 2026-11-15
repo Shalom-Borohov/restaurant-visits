@@ -8,7 +8,11 @@ export const SETTINGS_PATH = `${TABS_PATH}/settings`
 
 const RESTAURANTS_STACK_VISITS_PATH = `${RESTAURANTS_PATH}/visits`
 
-export const NEW_VISIT_PATH = `${RESTAURANTS_STACK_VISITS_PATH}/new`
+const NEW_SEGMENT = 'new'
+
+export const NEW_VISIT_PATH = `${RESTAURANTS_STACK_VISITS_PATH}/${NEW_SEGMENT}`
+
+export const NEW_VISIT_IN_VISITS_PATH = `${VISITS_PATH}/${NEW_SEGMENT}`
 
 export const restaurantPath = (restaurantId: string) => `${RESTAURANTS_PATH}/${restaurantId}`
 

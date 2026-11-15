@@ -1,19 +1,20 @@
 import { IonContent, IonPage } from '@ionic/react'
 import { useDeferredValue, useMemo, useState } from 'react'
+import { NewVisitLink } from '../../components/NewVisitLink'
 import { useRecords } from '../../data/hooks'
 import { placeSuggestions } from '../../domain/places'
 import type { Records } from '../../domain/types'
+import { NEW_VISIT_PATH } from '../../navigation/paths'
 import { RESTAURANTS_COPY } from './copy'
-import { NewVisitButton } from './NewVisitButton'
 import { filterByPlace, filterWithinPlaces, NO_PLACE_FILTER } from './placeFilter'
 import { PlaceFilters } from './PlaceFilters'
 import { restaurantCards } from './restaurantCards'
-import { RestaurantTile } from './RestaurantTile'
+import { RestaurantList } from './RestaurantList'
 import './restaurants.css'
 import { SearchField } from './SearchField'
 import { SearchResults } from './SearchResults'
 import { waitingDishes } from './waitingDishes'
-import { WaitingDishes } from './WaitingDishes'
+import { WaitingLine } from './WaitingLine'
 
 function RestaurantsBody({ records, query }: { records: Records; query: string }) {
   const [placeFilter, setPlaceFilter] = useState(NO_PLACE_FILTER)
@@ -28,16 +29,14 @@ function RestaurantsBody({ records, query }: { records: Records; query: string }
   }
 
   return (
-    <div className="page-stack">
+    <div className="restaurants-body">
       <PlaceFilters places={places} filter={activeFilter} onFilterChange={setPlaceFilter} />
       {query.trim() ? (
         <SearchResults query={query} records={shownRecords} cards={cards} />
       ) : (
         <>
-          {waiting && <WaitingDishes waiting={waiting} />}
-          {cards.map((card) => (
-            <RestaurantTile key={card.restaurant.id} card={card} />
-          ))}
+          {waiting && <WaitingLine waiting={waiting} />}
+          <RestaurantList cards={cards} />
         </>
       )}
     </div>
@@ -52,14 +51,12 @@ export function RestaurantsPage() {
   return (
     <IonPage>
       <IonContent fullscreen>
-        <div className="page-body page-body-docked">
-          <header className="glaze-header">
-            <h1 className="glaze-title">{RESTAURANTS_COPY.title}</h1>
-            <SearchField query={query} onQueryChange={setQuery} />
-          </header>
+        <div className="page-body">
+          <h1 className="page-title">{RESTAURANTS_COPY.title}</h1>
+          <SearchField query={query} onQueryChange={setQuery} />
           {records && <RestaurantsBody records={records} query={deferredQuery} />}
         </div>
-        <NewVisitButton />
+        <NewVisitLink to={NEW_VISIT_PATH} />
       </IonContent>
     </IonPage>
   )

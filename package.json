@@ -1,7 +1,7 @@
 {
   "name": "restaurant-visits",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,8 +11,7 @@
     "test": "vitest run --maxWorkers=25%"
   },
   "dependencies": {
-    "@fontsource/rubik": "^5.2.8",
-    "@fontsource/suez-one": "^5.3.0",
+    "@fontsource/assistant": "^5.3.0",
     "@ionic/react": "^9.0.9",
     "@ionic/react-router": "^9.0.9",
     "dexie": "^4.4.7",

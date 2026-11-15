@@ -41,7 +41,7 @@ export function RestaurantPicker({ records, heading, onPick, onDraft }: Restaura
 
   return (
     <div className="page-body page-stack visit-picker">
-      <h2 className="visit-heading">{heading}</h2>
+      <h2 className="visit-picker-heading">{heading}</h2>
       <label>
         <span className="visually-hidden">{VISIT_COPY.searchRestaurants}</span>
         <input
@@ -53,17 +53,27 @@ export function RestaurantPicker({ records, heading, onPick, onDraft }: Restaura
           onChange={(event) => setQuery(event.target.value)}
         />
       </label>
-      {shown.map((restaurant) => (
-        <button key={restaurant.id} type="button" className="tile picker-tile" onClick={() => onPick(restaurant.id)}>
-          <span className="picker-name" dir="auto">
-            {restaurant.name}
-          </span>
-          {restaurant.city && <span className="secondary-text">{restaurant.city}</span>}
-        </button>
-      ))}
+      {shown.length > 0 && (
+        <ul className="tile list-panel">
+          {shown.map((restaurant) => (
+            <li key={restaurant.id}>
+              <button type="button" className="visit-picker-row" onClick={() => onPick(restaurant.id)}>
+                <span className="visit-picker-name" dir="auto">
+                  {restaurant.name}
+                </span>
+                {restaurant.city && (
+                  <span className="visit-picker-city" dir="auto">
+                    {restaurant.city}
+                  </span>
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
       {query.trim() && shown.length === 0 && <p className="empty-note">{VISIT_COPY.noRestaurantMatches}</p>}
       {onDraft && (
-        <button type="button" className="choice new-restaurant-button" onClick={() => setIsCreating(true)}>
+        <button type="button" className="quiet-button" onClick={() => setIsCreating(true)}>
           <PlusIcon />
           <span>{VISIT_COPY.newRestaurant}</span>
         </button>

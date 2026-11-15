@@ -1,24 +1,13 @@
 import { useIonRouter } from '@ionic/react'
-import { CameraPlate } from '../../components/CameraPlate'
+import { NewVisitLink } from '../../components/NewVisitLink'
 import { useConfirmDelete } from '../../components/useConfirmDelete'
 import { deleteRestaurant } from '../../data/repo'
 import type { Restaurant } from '../../domain/types'
 import { newVisitAtPath, RESTAURANTS_PATH } from '../../navigation/paths'
 import { RESTAURANT_COPY } from './copy'
 
-export function NewVisitHereButton({ restaurantId }: { restaurantId: string }) {
-  const router = useIonRouter()
-
-  return (
-    <button
-      type="button"
-      className="new-visit-here"
-      aria-label={RESTAURANT_COPY.newVisitHere}
-      onClick={() => router.push(newVisitAtPath(restaurantId))}
-    >
-      <CameraPlate />
-    </button>
-  )
+export function NewVisitHereLink({ restaurantId }: { restaurantId: string }) {
+  return <NewVisitLink to={newVisitAtPath(restaurantId)} label={RESTAURANT_COPY.newVisitHere} />
 }
 
 export function DeleteRestaurantButton({ restaurant }: { restaurant: Restaurant }) {

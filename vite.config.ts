@@ -5,7 +5,7 @@ import packageJson from './package.json' with { type: 'json' }
 
 const APP_NAME = 'מסעדות'
 
-const BACKGROUND_COLOR = '#f7f3ee'
+const BACKGROUND_COLOR = '#f4f1f5'
 
 export default defineConfig(({ mode }) => ({
   base: '/restaurant-visits/',

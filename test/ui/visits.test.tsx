@@ -3,11 +3,14 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { addDish, addRestaurant, addVisit } from '../../src/data/repo'
 import { resetDb } from '../helpers/db'
 import { expectInOrder } from '../helpers/ionic'
+import { shrunkPhoto, stubObjectUrls } from '../helpers/photo'
 import { currentPath, renderAt } from '../helpers/renderAt'
 
 const NOW = new Date(2026, 10, 10, 20, 15).getTime()
 
 const LATER = NOW + 1
+
+const takenPhoto = () => shrunkPhoto(new Uint8Array([1, 2, 3]).buffer, new Uint8Array([4]).buffer)
 
 const visitRow = (restaurantName: string) => screen.findAllByRole('link', { name: new RegExp(restaurantName) })
 
@@ -47,36 +50,48 @@ describe('visits', () => {
     expect(within(takeawayRow).queryByText(/₪/)).not.toBeInTheDocument()
   })
 
-  it('shows the first plates of a visit and how many more there are', async () => {
-    const rosa = await addRestaurant({ name: 'נונה רוזה' }, NOW)
-    const visitId = await addVisit({ restaurantId: rosa, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
+  describe('photos on a row', () => {
+    stubObjectUrls()
 
-    for (const name of ['א', 'ב', 'ג', 'ד', 'ה', 'ו']) {
-      await addDish({ visitId, name }, undefined, NOW)
-    }
+    it('shows the first four dish photos of a visit and how many more there are', async () => {
+      const rosa = await addRestaurant({ name: 'נונה רוזה' }, NOW)
+      const visitId = await addVisit({ restaurantId: rosa, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
 
-    renderAt('/tabs/visits')
+      const names = ['שקשוקה', 'חומוס', 'סביח', 'פלאפל', 'מלבי', 'סלט']
 
-    const [row] = await visitRow('נונה רוזה')
+      for (const [order, name] of names.entries()) {
+        await addDish({ visitId, name }, takenPhoto(), NOW + order)
+      }
 
-    expect(row.querySelectorAll('.plate')).toHaveLength(4)
-    expect(within(row).getByText('+2')).toBeVisible()
-  })
+      renderAt('/tabs/visits')
 
-  it('gives the row plates a plain rim with no verdict colour', async () => {
-    const rosa = await addRestaurant({ name: 'נונה רוזה' }, NOW)
-    const visitId = await addVisit({ restaurantId: rosa, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
+      const [row] = await visitRow('נונה רוזה')
 
-    await addDish({ visitId, name: 'פיצה', verdict: 'must' }, undefined, NOW)
-    await addDish({ visitId, name: 'סלט' }, undefined, NOW)
-    renderAt('/tabs/visits')
+      expect(await within(row).findByRole('img', { name: 'פלאפל' })).toBeVisible()
+      expect(within(row).getAllByRole('img').map((photo) => photo.getAttribute('alt'))).toEqual([
+        'שקשוקה',
+        'חומוס',
+        'סביח',
+        'פלאפל',
+      ])
+      expect(within(row).getByText('+2')).toBeVisible()
+    })
 
-    const [row] = await visitRow('נונה רוזה')
-    const plates = Array.from(row.querySelectorAll('.plate'))
+    it('never fades a photo on a row, whatever the verdict', async () => {
+      const rosa = await addRestaurant({ name: 'נונה רוזה' }, NOW)
+      const visitId = await addVisit({ restaurantId: rosa, visitedOn: '2026-11-03', kind: 'dineIn' }, NOW)
 
-    expect(plates).toHaveLength(2)
-    plates.forEach((plate) => expect(plate.className).toMatch(/\bplate-rim-plain\b/))
-    expect(row.querySelector('.plate-rim-must, .plate-rim-unrated')).toBeNull()
+      await addDish({ visitId, name: 'פיצה', verdict: 'avoid' }, takenPhoto(), NOW)
+      await addDish({ visitId, name: 'סלט', verdict: 'weak' }, takenPhoto(), NOW)
+      renderAt('/tabs/visits')
+
+      const [row] = await visitRow('נונה רוזה')
+
+      expect(await within(row).findByRole('img', { name: 'פיצה' })).toBeVisible()
+      expect(within(row).getByRole('img', { name: 'סלט' })).toBeVisible()
+      expect(row.querySelector('.dish-photo-fade-dark, .dish-photo-fade-dim')).toBeNull()
+      expect(within(row).queryByText(/^\+/)).not.toBeInTheDocument()
+    })
   })
 
   it('opens a visit when tapped', async () => {

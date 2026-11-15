@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { addDish, addRestaurant, addVisit, allDishes, dishPhoto, dishThumbnail } from '../../src/data/repo'
-import { newVisitAtPath, visitsStackVisitPath } from '../../src/navigation/paths'
+import { NEW_VISIT_PATH, newVisitAtPath, visitsStackVisitPath } from '../../src/navigation/paths'
 import { freezeDate } from '../helpers/clock'
 import { resetDb } from '../helpers/db'
 import { modalDismissed } from '../helpers/overlays'
@@ -51,6 +51,16 @@ describe('dish photos', () => {
 
     expect(await screen.findByLabelText(DISH_CAMERA)).toHaveAttribute('capture', 'environment')
     expect(screen.getByLabelText(DISH_CAMERA)).toHaveAttribute('accept', 'image/*')
+  })
+
+  it('offers no dish camera while the restaurant is still being picked', async () => {
+    await addRestaurant({ name: 'Abu Hassan' }, NOW)
+
+    renderAt(NEW_VISIT_PATH)
+
+    expect(await screen.findByRole('button', { name: /Abu Hassan/ })).toBeInTheDocument()
+    expect(screen.queryByLabelText(DISH_CAMERA)).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: WITHOUT_PHOTO })).not.toBeInTheDocument()
   })
 
   it('opens the sheet without a photo from the smaller button, with the camera and library still there', async () => {

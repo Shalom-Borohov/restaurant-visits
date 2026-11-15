@@ -1,8 +1,9 @@
 import { IonContent, IonPage } from '@ionic/react'
 import { Link } from 'react-router-dom'
+import { NewVisitLink } from '../../components/NewVisitLink'
 import { monthHeading } from '../../copy/labels'
 import { useRecords } from '../../data/hooks'
-import { RESTAURANTS_PATH } from '../../navigation/paths'
+import { NEW_VISIT_IN_VISITS_PATH, RESTAURANTS_PATH } from '../../navigation/paths'
 import { VISITS_COPY } from './copy'
 import { visitMonths } from './visitMonths'
 import { VisitRow } from './VisitRow'
@@ -10,9 +11,9 @@ import './visits.css'
 
 function EmptyVisits() {
   return (
-    <div className="empty-note">
+    <div className="empty-note visits-empty">
       <p>{VISITS_COPY.empty}</p>
-      <Link className="visits-empty-link" to={RESTAURANTS_PATH}>
+      <Link className="quiet-button" to={RESTAURANTS_PATH}>
         {VISITS_COPY.toRestaurants}
       </Link>
     </div>
@@ -27,21 +28,22 @@ export function VisitsPage() {
     <IonPage>
       <IonContent fullscreen>
         <div className="page-body">
-          <header className="glaze-header">
-            <h1 className="glaze-title">{VISITS_COPY.title}</h1>
-          </header>
+          <h1 className="page-title">{VISITS_COPY.title}</h1>
           {records && months.length === 0 && <EmptyVisits />}
           {months.map(({ month, visits }) => (
-            <section key={month} className="visit-month">
-              <h2 className="visit-month-heading">{monthHeading(month)}</h2>
-              <div className="page-stack">
+            <section key={month}>
+              <h2 className="visits-month-heading">{monthHeading(month)}</h2>
+              <ul className="list-panel">
                 {visits.map((summary) => (
-                  <VisitRow key={summary.visit.id} summary={summary} />
+                  <li key={summary.visit.id}>
+                    <VisitRow summary={summary} />
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           ))}
         </div>
+        <NewVisitLink to={NEW_VISIT_IN_VISITS_PATH} />
       </IonContent>
     </IonPage>
   )

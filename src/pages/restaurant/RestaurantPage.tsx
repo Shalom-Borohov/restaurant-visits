@@ -7,8 +7,8 @@ import { placeSuggestions } from '../../domain/places'
 import { summarizeDishes } from '../../domain/restaurantDishes'
 import { RESTAURANTS_PATH } from '../../navigation/paths'
 import { RESTAURANT_COPY } from './copy'
-import { DishStack } from './DishStack'
-import { DeleteRestaurantButton, NewVisitHereButton } from './RestaurantActions'
+import { DishGroups } from './DishGroups'
+import { DeleteRestaurantButton, NewVisitHereLink } from './RestaurantActions'
 import { RestaurantEditSheet } from './RestaurantEditSheet'
 import { RestaurantSummary } from './RestaurantSummary'
 import { useIsInView } from './useIsInView'
@@ -37,26 +37,30 @@ export function RestaurantPage() {
               {own.restaurant.name}
             </IonTitle>
           )}
+          {own && (
+            <IonButtons slot="end">
+              <button
+                type="button"
+                className="toolbar-text-button"
+                onClick={() => setEditSheet((current) => ({ isOpen: true, openCount: current.openCount + 1 }))}
+              >
+                {RESTAURANT_COPY.edit}
+              </button>
+            </IonButtons>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {records && !own && <p className="empty-note">{RESTAURANT_COPY.notFound}</p>}
         {own && (
           <>
-            <div className="page-body page-body-docked page-stack restaurant-body">
-              <RestaurantSummary
-                restaurant={own.restaurant}
-                visits={own.visits}
-                headingRef={nameRef}
-                onEdit={() => setEditSheet((current) => ({ isOpen: true, openCount: current.openCount + 1 }))}
-              />
-              <DishStack summaries={summarizeDishes(own.visits, own.dishes)} />
+            <div className="page-body restaurant-body">
+              <RestaurantSummary restaurant={own.restaurant} visits={own.visits} headingRef={nameRef} />
+              <DishGroups summaries={summarizeDishes(own.visits, own.dishes)} />
               <VisitList visits={own.visits} dishes={own.dishes} />
               <DeleteRestaurantButton restaurant={own.restaurant} />
             </div>
-            <div slot="fixed" className="floating-dock new-visit-here-dock">
-              <NewVisitHereButton restaurantId={own.restaurant.id} />
-            </div>
+            <NewVisitHereLink restaurantId={own.restaurant.id} />
             <RestaurantEditSheet
               restaurant={own.restaurant}
               suggestions={placeSuggestions(own.otherRestaurants)}

@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
 import { ChoiceGroup } from '../../components/ChoiceGroup'
+import { OpenIcon } from '../../components/icons'
 import { useMessageToast } from '../../components/useMessageToast'
 import { VISIT_KIND_LABELS } from '../../copy/labels'
 import { type Visit, VISIT_KINDS } from '../../domain/types'
@@ -8,15 +8,20 @@ import { VISIT_COPY } from './copy'
 
 export type VisitSettings = Pick<Visit, 'visitedOn' | 'kind'>
 
+type MovableRestaurant = {
+  name: string
+  onMove: () => void
+}
+
 type VisitSettingsFieldsProps = {
   settings: VisitSettings
   onChange: (changes: Partial<VisitSettings>) => void
-  children?: ReactNode
+  restaurant: MovableRestaurant | undefined
 }
 
 const currentDay = () => todayVisitDate(new Date())
 
-export function VisitSettingsFields({ settings, onChange, children }: VisitSettingsFieldsProps) {
+export function VisitSettingsFields({ settings, onChange, restaurant }: VisitSettingsFieldsProps) {
   const toast = useMessageToast()
 
   function changeDate(visitedOn: string) {
@@ -34,25 +39,43 @@ export function VisitSettingsFields({ settings, onChange, children }: VisitSetti
   }
 
   return (
-    <section className="tile visit-settings">
-      {children}
-      <label className="visit-settings-date">
-        <span className="visit-settings-label">{VISIT_COPY.visitDate}</span>
-        <input
-          className="field"
-          type="date"
-          max={currentDay()}
-          value={settings.visitedOn}
-          onChange={(event) => changeDate(event.target.value)}
+    <ul className="tile list-panel visit-facts">
+      {restaurant && (
+        <li>
+          <button type="button" className="visit-fact" onClick={restaurant.onMove}>
+            <span className="visit-fact-label">{VISIT_COPY.visitRestaurant}</span>
+            <span className="visit-fact-value" dir="auto">
+              {restaurant.name}
+            </span>
+            <OpenIcon />
+          </button>
+        </li>
+      )}
+      <li>
+        <label className="visit-fact">
+          <span className="visit-fact-label">{VISIT_COPY.visitDate}</span>
+          <input
+            className="visit-fact-value visit-fact-date"
+            type="date"
+            max={currentDay()}
+            value={settings.visitedOn}
+            onChange={(event) => changeDate(event.target.value)}
+          />
+        </label>
+      </li>
+      <li className="visit-fact">
+        <span className="visit-fact-label" aria-hidden="true">
+          {VISIT_COPY.visitKind}
+        </span>
+        <ChoiceGroup
+          label={VISIT_COPY.visitKind}
+          className="visit-kinds"
+          choices={VISIT_KINDS}
+          chosen={settings.kind}
+          labelOf={(kind) => VISIT_KIND_LABELS[kind]}
+          onChoose={(kind) => onChange({ kind })}
         />
-      </label>
-      <ChoiceGroup
-        label={VISIT_COPY.visitKind}
-        choices={VISIT_KINDS}
-        chosen={settings.kind}
-        labelOf={(kind) => VISIT_KIND_LABELS[kind]}
-        onChoose={(kind) => onChange({ kind })}
-      />
-    </section>
+      </li>
+    </ul>
   )
 }

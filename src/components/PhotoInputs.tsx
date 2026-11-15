@@ -1,9 +1,9 @@
-import type { ChangeEvent, ReactNode } from 'react'
+import type { ChangeEvent, LabelHTMLAttributes, ReactNode } from 'react'
 import { CameraIcon, LibraryIcon } from './icons'
 import './PhotoInputs.css'
 import { takePickedFile } from './takePickedFile'
 
-type PhotoInputProps = {
+type PhotoInputProps = Pick<LabelHTMLAttributes<HTMLLabelElement>, 'slot' | 'aria-busy'> & {
   className: string
   opensCamera: boolean
   onPick: (file: File) => void
@@ -20,9 +20,9 @@ const IMAGES_ONLY = 'image/*'
 
 const REAR_CAMERA = 'environment'
 
-const CAMERA_ICON_SIZE = 28
+const CAMERA_ICON_SIZE = 22
 
-export function PhotoInput({ className, opensCamera, onPick, children }: PhotoInputProps) {
+export function PhotoInput({ className, opensCamera, onPick, children, ...labelProps }: PhotoInputProps) {
   function pickFirst(event: ChangeEvent<HTMLInputElement>) {
     const file = takePickedFile(event.currentTarget)
 
@@ -32,7 +32,7 @@ export function PhotoInput({ className, opensCamera, onPick, children }: PhotoIn
   }
 
   return (
-    <label className={className}>
+    <label className={className} {...labelProps}>
       <input
         className="visually-hidden"
         type="file"

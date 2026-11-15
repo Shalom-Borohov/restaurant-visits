@@ -54,3 +54,20 @@ export function summarizeDishes(visits: Visit[], dishes: Dish[]) {
 
   return [...Map.groupBy(dated, (dish) => dishKey(dish.name)).values()].map(summarize).sort(bestFirst)
 }
+
+export const SKIP_VERDICTS: readonly Verdict[] = ['weak', 'avoid']
+
+const MUST_ORDER: Verdict = 'must'
+
+const isSkip = (verdict: Verdict) => SKIP_VERDICTS.includes(verdict)
+
+export function groupForRevisit(summaries: DishSummary[]) {
+  return {
+    mustOrder: summaries.filter((summary) => summary.verdict === MUST_ORDER),
+    toOrder: summaries.filter(
+      (summary) => summary.verdict !== undefined && summary.verdict !== MUST_ORDER && !isSkip(summary.verdict),
+    ),
+    toSkip: summaries.filter((summary) => summary.verdict !== undefined && isSkip(summary.verdict)),
+    toRate: summaries.filter((summary) => summary.verdict === undefined),
+  }
+}

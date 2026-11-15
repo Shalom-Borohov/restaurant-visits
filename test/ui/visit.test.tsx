@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   addDish,
@@ -119,7 +119,7 @@ describe('logging a visit', () => {
     expect(await screen.findByText(WITHOUT_PHOTO)).toBeInTheDocument()
     await pressText('מסעדות')
     fireEvent.click(await screen.findByRole('link', { name: /Ramen Kaze/ }))
-    fireEvent.click(await screen.findByRole('button', { name: 'ביקור חדש כאן' }))
+    fireEvent.click(await screen.findByRole('link', { name: 'ביקור חדש כאן' }))
     await waitFor(() => expect(currentSearch()).toBe(`?restaurant=${ramenId}`))
 
     const shownTitle = await ionElement('ion-title')
@@ -153,7 +153,7 @@ describe('an existing visit', () => {
     return { restaurantId, visitId, dishId }
   }
 
-  it('shows its dishes as plates with their verdict and the visit total', async () => {
+  it('shows its dishes with their verdict and price, and the visit total under them', async () => {
     const { visitId } = await seedVisit()
 
     await addDish({ visitId, name: 'פול', price: 38, verdict: 'must' }, undefined, NOW + 1)
@@ -164,7 +164,46 @@ describe('an existing visit', () => {
     await waitFor(() => expect(shownTitle).toHaveTextContent('Abu Hassan'))
     expect(await screen.findByText('לדרג')).toBeInTheDocument()
     expect(screen.getByText('חובה להזמין')).toBeInTheDocument()
-    expect(screen.getByText('סה״כ ₪80')).toBeInTheDocument()
+    expect(screen.getByText('₪42')).toBeInTheDocument()
+    expect(screen.getByText('סה״כ')).toBeInTheDocument()
+    expect(screen.getByText('₪80')).toBeInTheDocument()
+  })
+
+  it('hides the total when no dish has a price', async () => {
+    const restaurantId = await addRestaurant({ name: 'Abu Hassan' }, NOW)
+    const visitId = await addVisit({ restaurantId, visitedOn: '2026-11-08', kind: 'dineIn' }, NOW)
+
+    await addDish({ visitId, name: 'חומוס' }, undefined, NOW)
+    renderAt(visitsStackVisitPath(visitId))
+
+    expect(await screen.findByRole('button', { name: /חומוס/ })).toBeInTheDocument()
+    expect(screen.queryByText('סה״כ')).not.toBeInTheDocument()
+  })
+
+  it('offers the five verdicts in order with the chosen one pressed, and a hint in the empty note', async () => {
+    const { visitId, dishId } = await seedVisit()
+
+    await updateDish({ id: dishId, visitId, name: 'חומוס', verdict: 'must', createdAt: NOW })
+    renderAt(visitsStackVisitPath(visitId))
+    await press(/חומוס/)
+
+    const verdicts = within(await screen.findByRole('group', { name: 'איך היה?' })).getAllByRole('button')
+
+    expect(verdicts.map((verdict) => verdict.textContent)).toEqual([
+      'חובה להזמין',
+      'טעים',
+      'בסדר',
+      'לא משהו',
+      'לא להזמין',
+    ])
+    expect(verdicts.map((verdict) => verdict.getAttribute('aria-pressed'))).toEqual([
+      'true',
+      'false',
+      'false',
+      'false',
+      'false',
+    ])
+    expect(screen.getByLabelText('הערה')).toHaveAttribute('placeholder', 'הערה על המנה')
   })
 
   it('rates an unrated dish later and adds its price and note', async () => {

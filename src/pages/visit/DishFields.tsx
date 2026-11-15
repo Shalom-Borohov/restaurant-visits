@@ -56,7 +56,7 @@ export function DishFields({ form, initialNote, suggestions, onChange }: DishFie
           ))}
         </div>
       )}
-      <div className="dish-sheet-field">
+      <div className="dish-sheet-field dish-sheet-price-field">
         <label className="dish-sheet-label" htmlFor={priceId}>
           {DISH_COPY.price}
         </label>
@@ -79,9 +79,9 @@ export function DishFields({ form, initialNote, suggestions, onChange }: DishFie
       <fieldset className="dish-sheet-field dish-sheet-verdicts">
         <legend className="dish-sheet-label">{DISH_COPY.verdict}</legend>
         <ChoiceGroup
-          className="verdict-scale"
+          className="verdict-choices"
           choices={VERDICTS}
-          classOf={(verdict) => `verdict-scale-${verdict}`}
+          classOf={(verdict) => `verdict-choice-${verdict}`}
           chosen={form.verdict}
           labelOf={(verdict) => VERDICT_LABELS[verdict]}
           tapAgainClears
@@ -95,6 +95,7 @@ export function DishFields({ form, initialNote, suggestions, onChange }: DishFie
           dir="auto"
           rows={NOTE_ROWS}
           name={NOTE_FIELD}
+          placeholder={DISH_COPY.notePlaceholder}
           defaultValue={initialNote}
         />
       </label>
