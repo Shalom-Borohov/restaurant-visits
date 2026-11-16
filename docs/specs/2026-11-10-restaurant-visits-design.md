@@ -73,6 +73,9 @@ A personal iPhone PWA that records what its owner ordered at each restaurant, ho
 77. **The חובה להזמין photos on a restaurant's page load the full photo; every other list photo keeps the thumbnail.** An odd last one spans the full row, wider than tall. Why: a restaurant has few such dishes, and a 240 px thumbnail blurs at tile size; a lone half-width tile beside an empty space looks unfinished (added 2026-11-15 from spec review, clarifies 46 and 71).
 78. **On a restaurant's page and in a visit, the names of dishes to skip are softer text, and a לא להזמין name is struck through,** as well as their verdict word and photo. Why: 75, what to skip fades (added 2026-11-15 from spec review, clarifies 75).
 79. **The משוב tile shows, under its row, the note that the report opens on GitHub with the device details and sends no restaurants, visits or photos,** as the sheet does. Why: 64, the issue is public, so this should be clear before the sheet opens (added 2026-11-15 from spec review, clarifies 64).
+80. **Swipe-back is Ionic's own gesture; iOS's built-in edge swipe is blocked** for touches that start within 20 px of either screen edge, except on tap targets (buttons, links and rows, controls, a sheet's backdrop). Why: in the Home Screen app on a Hebrew iPhone both gestures start at the right edge and ran together, so one swipe could go back twice, jump or freeze taps. Same fix as the owner's other apps (added 2026-11-16, issue #15, clarifies 31).
+    - Cost: a scroll that starts in that 20 px strip doesn't scroll, including a sideways drag of the place filters started in their edge padding instead of on a pill. A tap there on plain text or empty space does nothing, so it doesn't close the keyboard either.
+    - The strip is judged by the finger that just landed, so a second finger at the edge is blocked even while another rests mid-screen (added 2026-11-16 from code review).
 
 ### Photos
 

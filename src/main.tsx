@@ -19,6 +19,7 @@ import './components/ListPanel.css'
 
 import { App } from './App'
 import { IONIC_CONFIG } from './ionicConfig'
+import { blockSystemEdgeSwipe } from './navigation/edgeSwipe'
 
 const ROOT_ELEMENT_ID = 'root'
 
@@ -40,6 +41,8 @@ function rootElement() {
 }
 
 setupIonicReact(IONIC_CONFIG)
+
+blockSystemEdgeSwipe(document)
 
 navigator.storage?.persist?.()
 
